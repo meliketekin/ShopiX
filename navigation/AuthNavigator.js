@@ -27,7 +27,7 @@ export default function AuthStack() {
         component={SignUpScreen}
         options={{
           headerShown: false,
-          ...TransitionPresets.RevealFromBottomAndroid,
+          ...TransitionPresets.ModalPresentationIOS,
         }}
       />
       <Stack.Screen
@@ -35,7 +35,7 @@ export default function AuthStack() {
         component={LoginScreen}
         options={{
           headerShown: false,
-          ...TransitionPresets.RevealFromBottomAndroid,
+          ...TransitionPresets.ModalPresentationIOS,
         }}
       />
       <Stack.Screen
@@ -43,7 +43,7 @@ export default function AuthStack() {
         component={BottomTabs}
         options={{
           headerShown: false,
-          ...TransitionPresets.ScaleFromCenterAndroid
+          ...TransitionPresets.SlideFromRightIOS
         }}
         />
     </Stack.Navigator>
