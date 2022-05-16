@@ -7,13 +7,14 @@ import {
 import WelcomeScreen from "../screens/WelcomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import LoginScreen from "../screens/LoginScreen";
+import BottomTabs from "./BottomTabNavigation"
 
-const Auth = createStackNavigator();
+const Stack = createStackNavigator();
 
 export default function AuthStack() {
   return (
-    <Auth.Navigator>
-      <Auth.Screen
+    <Stack.Navigator>
+      <Stack.Screen
         name="Welcome"
         component={WelcomeScreen}
         options={{
@@ -21,7 +22,7 @@ export default function AuthStack() {
           ...TransitionPresets.RevealFromBottomAndroid,
         }}
       />
-      <Auth.Screen
+      <Stack.Screen
         name="SignUpScreen"
         component={SignUpScreen}
         options={{
@@ -29,7 +30,7 @@ export default function AuthStack() {
           ...TransitionPresets.RevealFromBottomAndroid,
         }}
       />
-      <Auth.Screen
+      <Stack.Screen
         name="LoginScreen"
         component={LoginScreen}
         options={{
@@ -37,6 +38,14 @@ export default function AuthStack() {
           ...TransitionPresets.RevealFromBottomAndroid,
         }}
       />
-    </Auth.Navigator>
+      <Stack.Screen
+        name="BottomTabs"
+        component={BottomTabs}
+        options={{
+          headerShown: false,
+          ...TransitionPresets.ScaleFromCenterAndroid
+        }}
+        />
+    </Stack.Navigator>
   );
 }

@@ -13,7 +13,7 @@ export default function WelcomeScreen({navigation}) {
       <ImageBackground
         source={require("../assets/d.jpg")}
         resizeMode="cover"
-        style={styles.image}
+        style={StyleSheet.absoluteFillObject}
       >
         <View style={{ backgroundColor: "rgba(0,0,0,0.1)", flex: 1 }}>
           <Text style={styles.startText}>Get Started!</Text>
@@ -36,11 +36,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  image: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
+  
   startText: {
     color: "black",
     fontSize: 40,
