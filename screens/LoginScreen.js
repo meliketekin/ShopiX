@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -8,126 +8,202 @@ import {
   Image,
 } from "react-native";
 import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import * as yup from "yup";
+import { Formik } from "formik";
+
+const loginValidationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Please enter valid email!")
+    .required("Email address is required."),
+  password: yup
+    .string()
+    .required("Password is required.")
+});
 
 export default function LoginScreen({ navigation }) {
+  const [showPassword, setShowPassword] = useState(false);
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "flex-end",
-        backgroundColor: "#ffffff",
-      }}
+    <Formik
+      initialValues={{ email: "", password: "" }}
+      validateOnMount={true}
+      validationSchema={loginValidationSchema}
+      onSubmit={values => alert(JSON.stringify(values))}
     >
-      <View style={{ height: "40%", flexDirection: "row" }}>
-        <TouchableOpacity style={{ marginLeft: 10, marginTop: "10%" }} onPress={() =>{
-          navigation.navigate("Welcome")
-        }}>
-          <Ionicons
-            name="chevron-back"
-            size={50}
-            color="#fe7979"
-            
-          />
-        </TouchableOpacity>
-        <Image
-          source={require("../assets/login.png")}
-          resizeMode="contain"
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        handleSubmit,
+        isSubmitting,
+        isValid,
+      }) => (
+        <View
           style={{
+            flex: 1,
+            justifyContent: "flex-end",
             backgroundColor: "#ffffff",
-            height: "89%",
-            width: "60%",
-            marginLeft: "2%",
-            marginTop: "10%",
-          }}
-        />
-      </View>
-      <View style={styles.loginContainer}>
-        <View
-          style={{
-            marginTop: "20%",
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.4,
-            shadowRadius: 2,
-            elevation: 2,
-            borderRadius: 10,
           }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              borderBottomWidth: 1,
-              backgroundColor: "#feeeee",
-              marginBottom: "10%",
-            }}
-          >
-            <MaterialIcons
-              name="mail-outline"
-              size={25}
-              style={{
-                marginLeft: 10,
-                alignSelf: "center",
-                paddingVertical: 10,
-              }}
-            />
-            <TextInput style={styles.input} placeholder="Email" />
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              borderBottomWidth: 1,
-              backgroundColor: "#feeeee",
-            }}
-          >
-            <MaterialIcons
-              name="lock-outline"
-              size={25}
-              style={{
-                marginLeft: 10,
-                alignSelf: "center",
-                paddingVertical: 10,
-              }}
-            />
-            <TextInput style={styles.input} placeholder="Password" />
-          </View>
-        </View>
-        <TouchableOpacity>
-          <Text style={styles.forgotPassword}>Forgot password?</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.loginButton}
-          onPress={() => navigation.navigate("BottomTabs")}
-        >
-          <Text style={styles.loginButtonText}>LOGIN</Text>
-        </TouchableOpacity>
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "center",
-            marginTop: 20,
-          }}
-        >
-          <Text style={{ fontSize: 15 }}>Don't have an account? </Text>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate("SignUpScreen")
-          }}>
-            <Text
-              style={{
-                fontSize: 15,
-                fontStyle: "italic",
-                fontWeight: "bold",
-                color: "#fe9393",
+          <View style={{ height: "40%", flexDirection: "row" }}>
+            <TouchableOpacity
+              style={{ marginLeft: 10, marginTop: "4%" }}
+              onPress={() => {
+                navigation.navigate("Welcome");
               }}
             >
-              Register Now
-            </Text>
-          </TouchableOpacity>
+              <Ionicons name="chevron-back" size={50} color="#fe7979" />
+            </TouchableOpacity>
+            <Image
+              source={require("../assets/login.png")}
+              resizeMode="contain"
+              style={{
+                backgroundColor: "#ffffff",
+                height: "89%",
+                width: "60%",
+                marginLeft: "2%",
+                marginTop: "8%",
+              }}
+            />
+          </View>
+          <View style={styles.loginContainer}>
+            <View
+              style={{
+                marginTop: "10%",
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 1 },
+                shadowOpacity: 0.4,
+                shadowRadius: 2,
+                elevation: 2,
+                borderRadius: 10,
+              }}
+            >
+              <View style={{ marginBottom: "7%" }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    borderBottomWidth: 1,
+                    backgroundColor: "#feeeee",
+                  }}
+                >
+                  <MaterialIcons
+                    name="mail-outline"
+                    size={25}
+                    style={{
+                      marginLeft: 10,
+                      alignSelf: "center",
+                      paddingVertical: 10,
+                    }}
+                  />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    onChangeText={handleChange("email")}
+                    onBlur={handleBlur("email")}
+                    value={values.email}
+                  />
+                  
+                    <Ionicons
+                      color={!errors.email ? "green" : "red"}
+                      name={!errors.email ? "checkmark-sharp" : "close"}
+                      size={25}
+                      style={{ alignSelf: "center", marginRight: 10 }}
+                    />
+                 
+                </View>
+                {errors.email && touched.email && (
+                  <Text style={styles.errors}>{errors.email}</Text>
+                )}
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  borderBottomWidth: 1,
+                  backgroundColor: "#feeeee",
+                }}
+              >
+                <MaterialIcons
+                  name="lock-outline"
+                  size={25}
+                  style={{
+                    marginLeft: 10,
+                    alignSelf: "center",
+                    paddingVertical: 10,
+                  }}
+                />
+                <TextInput
+                  style={styles.input}
+                  placeholder="Password"
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  secureTextEntry={showPassword} //password dots
+                />
+                <TouchableOpacity
+                  style={{ alignSelf: "center", marginRight: 10 }}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons
+                    color={"#fe9393"}
+                    name={showPassword ? "eye" : "eye-off"}
+                    size={25}
+                  />
+                </TouchableOpacity>
+              </View>
+              {errors.password && touched.password && (
+                <Text style={styles.errors}>{errors.password}</Text>
+              )}
+            </View>
+            <TouchableOpacity>
+              <Text style={styles.forgotPassword}>Forgot password?</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              rounded
+              disabled={!isValid}
+              style={[
+                styles.loginButton,
+                { backgroundColor: isValid ? "#fe9393" : "#feb8b8" },
+              ]}
+              onPress={() => {
+                // navigation.navigate("BottomTabs");
+                handleSubmit();
+              }}
+            >
+              <Text style={styles.loginButtonText}>LOGIN</Text>
+            </TouchableOpacity>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                marginTop: 20,
+              }}
+            >
+              <Text style={{ fontSize: 15 }}>Don't have an account? </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("SignUpScreen");
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 15,
+                    fontStyle: "italic",
+                    fontWeight: "bold",
+                    color: "#fe9393",
+                  }}
+                >
+                  Register Now
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
-      </View>
-    </View>
+      )}
+    </Formik>
   );
 }
 
@@ -157,10 +233,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   loginButton: {
-    backgroundColor: "#fe9393",
     borderRadius: 10,
     height: 50,
-
     justifyContent: "center",
     marginTop: 30,
     shadowColor: "#000",
@@ -181,5 +255,10 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     marginTop: 13,
     textDecorationLine: "underline",
+  },
+  errors: {
+    color: "red",
+    fontSize: 12,
+    marginTop: "2%",
   },
 });

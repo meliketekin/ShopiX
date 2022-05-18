@@ -11,7 +11,7 @@ export default function WelcomeScreen({navigation}) {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require("../assets/d.jpg")}
+        source={require("../assets/f.jpg")}
         resizeMode="cover"
         style={StyleSheet.absoluteFillObject}
       >
@@ -21,10 +21,10 @@ export default function WelcomeScreen({navigation}) {
             <TouchableOpacity style={styles.signInButton}
              onPress={() => navigation.navigate("LoginScreen")}
             >
-              <Text style={styles.text}>Login</Text>
+              <Text style={styles.signInText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.signUpButton} onPress={() => navigation.navigate("SignUpScreen")}>
-              <Text style={styles.text}>Create an account</Text>
+              <Text style={styles.signUpText}>Create an account</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -38,10 +38,10 @@ const styles = StyleSheet.create({
   },
   
   startText: {
-    color: "black",
+    color: "white",
     fontSize: 40,
     alignSelf: "center",
-    marginTop: "10%",
+    marginTop: "15%",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.4,
@@ -51,9 +51,9 @@ const styles = StyleSheet.create({
   signUpButton: {
     marginHorizontal: 20,
     borderRadius: 10,
-
-    borderColor: "black",
-    backgroundColor: "#fea59f",
+    borderColor:"#db6d8e",
+    
+    backgroundColor: "white",
     borderWidth: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -69,15 +69,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 2,
     elevation: 2,
-    borderColor: "black",
-    backgroundColor: "#99e0e6",
+    backgroundColor: "#db6d8e",
     borderWidth: 2,
+    borderColor:"white",
     marginBottom: "3%",
   },
-  text: {
-    color: "black",
+  signUpText: {
+    color: "#db6d8e",
     fontSize: 20,
-
+    textAlign: "center",
+    fontWeight: "bold",
+    padding: 10,
+  },
+  signInText: {
+    color: "white",
+    fontSize: 20,
     textAlign: "center",
     fontWeight: "bold",
     padding: 10,
