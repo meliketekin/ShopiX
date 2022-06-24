@@ -6,15 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
+  KeyboardAvoidingView,
 } from "react-native";
-import {
-  FontAwesome,
-  Ionicons,
-  MaterialIcons,
-  Feather,
-} from "@expo/vector-icons";
+import { Ionicons, MaterialIcons, Feather } from "@expo/vector-icons";
 import * as yup from "yup";
 import { Formik } from "formik";
+import { auth, firestore } from "../firebase";
+
+
+import { login, logout, selectUser } from "../features/userSlice";
 
 const registerValidationSchema = yup.object().shape({
   name: yup
@@ -45,12 +45,42 @@ const registerValidationSchema = yup.object().shape({
 export default function SignUpScreen({ navigation }) {
   const [showPassword, setShowPassword] = useState(true);
   const [showPasswordAgain, setShowPasswordAgain] = useState(true);
+
+  
+
+  const handleSignUp = ({ name, email, password }) => {
+    // Create a new user with Firebase
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((auth) => {
+        firestore
+          .collection("users")
+          .doc(auth.user.uid)
+          .set({
+            name,
+            email,
+            uid: auth.user.uid,
+          })
+          .then(() => {
+            navigation.navigate("LoginScreen");
+          })
+
+          .catch((error) => {
+            console.log("user not updated");
+          });
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+
   return (
     <Formik
       initialValues={{ name: "", email: "", password: "", passwordAgain: "" }}
       validateOnMount={true}
       validationSchema={registerValidationSchema}
-      onSubmit={(values) => alert(JSON.stringify(values))}
+      onSubmit={(values) => handleSignUp(values)}
     >
       {({
         values,
@@ -63,7 +93,8 @@ export default function SignUpScreen({ navigation }) {
         isValid,
         /* and other goodies */
       }) => (
-        <View
+        <KeyboardAvoidingView
+          behavior="padding"
           style={{
             flex: 1,
             justifyContent: "flex-end",
@@ -103,7 +134,7 @@ export default function SignUpScreen({ navigation }) {
                 borderRadius: 10,
               }}
             >
-              <View style={{ marginBottom: "3%" }}>
+              <View style={{ marginBottom: errors.name ? "3%" : "5%" }}>
                 <View
                   style={{
                     flexDirection: "row",
@@ -132,7 +163,7 @@ export default function SignUpScreen({ navigation }) {
                   <Text style={styles.errors}>{errors.name}</Text>
                 )}
               </View>
-              <View style={{ marginBottom: "3%" }}>
+              <View style={{ marginBottom: errors.email ? "3%" : "5%" }}>
                 <View
                   style={{
                     flexDirection: "row",
@@ -161,7 +192,7 @@ export default function SignUpScreen({ navigation }) {
                   <Text style={styles.errors}>{errors.email}</Text>
                 )}
               </View>
-              <View style={{ marginBottom: "3%" }}>
+              <View style={{ marginBottom: errors.password ? "3%" : "5%" }}>
                 <View
                   style={{
                     flexDirection: "row",
@@ -201,7 +232,7 @@ export default function SignUpScreen({ navigation }) {
                   <Text style={styles.errors}>{errors.password}</Text>
                 )}
               </View>
-              <View style={{ marginBottom: "3%" }}>
+              <View style={{ marginBottom: "0%" }}>
                 <View
                   style={{
                     flexDirection: "row",
@@ -245,7 +276,7 @@ export default function SignUpScreen({ navigation }) {
 
             <TouchableOpacity
               style={styles.registerButton}
-              onPress={() => navigation.navigate("BottomTabs")}
+              onPress={handleSubmit}
             >
               <Text style={styles.registerButtonText}>REGISTER</Text>
             </TouchableOpacity>
@@ -276,7 +307,7 @@ export default function SignUpScreen({ navigation }) {
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       )}
     </Formik>
   );
@@ -302,7 +333,7 @@ const styles = StyleSheet.create({
     height: 50,
 
     justifyContent: "center",
-    marginTop: 30,
+    marginTop: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 1,
@@ -315,16 +346,10 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
-  forgotPassword: {
-    fontSize: 15,
-    color: "#1a24b3",
-    alignSelf: "flex-end",
-    marginTop: 13,
-    textDecorationLine: "underline",
-  },
+
   errors: {
     color: "red",
     fontSize: 12,
-    marginTop: "2%",
+    marginTop: "1%",
   },
 });

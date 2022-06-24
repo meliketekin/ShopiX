@@ -7,28 +7,61 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { FontAwesome, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import * as yup from "yup";
 import { Formik } from "formik";
+import { auth, firestore } from "../firebase";
+import { useDispatch, useSelector } from "react-redux";
+import { login, logout, selectUser } from "../features/userSlice";
+
+
 
 const loginValidationSchema = yup.object().shape({
   email: yup
     .string()
     .email("Please enter valid email!")
     .required("Email address is required."),
-  password: yup
-    .string()
-    .required("Password is required.")
+  password: yup.string().required("Password is required."),
 });
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation}) {
   const [showPassword, setShowPassword] = useState(false);
+  const dispatch = useDispatch();
+  const handleLogin = ({ email, password }) => {
+    // Sign in an existing user with Firebase
+    auth
+      .signInWithEmailAndPassword(email, password)
+
+      .then((auth) => {
+        if (auth) {
+          firestore
+            .collection("users")
+            .doc(auth.user.uid)
+            .get()
+            .then((doc) => {
+              if (doc.exists) {
+                dispatch(login(doc.data()));
+                alert("succesfull")
+                //navigation.navigate("Home");
+              } else {
+                alert("User does not exist");
+              }
+            });
+        }
+        // store the user's information in the redux state
+      })
+      // display the error if any
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
       validateOnMount={true}
       validationSchema={loginValidationSchema}
-      onSubmit={values => alert(JSON.stringify(values))}
+      onSubmit={handleLogin}
     >
       {({
         values,
@@ -104,14 +137,13 @@ export default function LoginScreen({ navigation }) {
                     onBlur={handleBlur("email")}
                     value={values.email}
                   />
-                  
-                    <Ionicons
-                      color={!errors.email ? "green" : "red"}
-                      name={!errors.email ? "checkmark-sharp" : "close"}
-                      size={25}
-                      style={{ alignSelf: "center", marginRight: 10 }}
-                    />
-                 
+
+                  <Ionicons
+                    color={!errors.email ? "green" : "red"}
+                    name={!errors.email ? "checkmark-sharp" : "close"}
+                    size={25}
+                    style={{ alignSelf: "center", marginRight: 10 }}
+                  />
                 </View>
                 {errors.email && touched.email && (
                   <Text style={styles.errors}>{errors.email}</Text>
@@ -167,10 +199,7 @@ export default function LoginScreen({ navigation }) {
                 styles.loginButton,
                 { backgroundColor: isValid ? "#fe9393" : "#feb8b8" },
               ]}
-              onPress={() => {
-                // navigation.navigate("BottomTabs");
-                handleSubmit();
-              }}
+              onPress={handleSubmit}
             >
               <Text style={styles.loginButtonText}>LOGIN</Text>
             </TouchableOpacity>
