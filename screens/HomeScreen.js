@@ -5,14 +5,39 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
+  FlatList
 } from "react-native";
 import { useFonts } from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ProductCard } from "../components/ProductCard";
+import axios from "axios"
 
 export default function HomeScreen() {
   const categories = ["All", "Women", "Men", "Jewelery", "Electronics"];
   const [categoryIndex, setCategoryIndex] = useState(0);
+  const [productData, setProductData] = useState(null);
+  const API_URL = `https://fakestoreapi.com/products`;
+
+
+  useEffect(() => {
+    axios.get(API_URL).then(response => {
+      setProductData(response.data);
+    })
+    
+  }, [API_URL]);
+  
+
+  const [loaded] = useFonts({
+    CaveatBrush: require("../assets/fonts/CaveatBrush-Regular.ttf"),
+    Chewy: require("../assets/fonts/Chewy-Regular.ttf"),
+    GochiHand: require("../assets/fonts/GochiHand-Regular.ttf"),
+    Monoton: require("../assets/fonts/Monoton-Regular.ttf"),
+    Satisfy: require("../assets/fonts/Satisfy-Regular.ttf"),
+  });
+  if (!loaded) {
+    return null;
+  }
 
   const CategoryList = () => {
     return (
@@ -39,16 +64,8 @@ export default function HomeScreen() {
       </View>
     );
   };
-  const [loaded] = useFonts({
-    CaveatBrush: require("../assets/fonts/CaveatBrush-Regular.ttf"),
-    Chewy: require("../assets/fonts/Chewy-Regular.ttf"),
-    GochiHand: require("../assets/fonts/GochiHand-Regular.ttf"),
-    Monoton: require("../assets/fonts/Monoton-Regular.ttf"),
-    Satisfy: require("../assets/fonts/Satisfy-Regular.ttf"),
-  });
-  if (!loaded) {
-    return null;
-  }
+
+
   return (
     <View style={{ flex: 1 }}>
       <Text style={styles.welcomeText}>Welcome to</Text>
@@ -68,6 +85,16 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
       <CategoryList />
+      <FlatList
+      numColumns={2}
+      data={productData}
+      renderItem={({item}) => (<ProductCard item={item}/>)}
+      columnWrapperStyle={{ justifyContent: "space-between" }}
+      showsVerticalScrollIndicator={true}
+      
+
+        />
+      
     </View>
   );
 }
@@ -135,6 +162,7 @@ const styles = StyleSheet.create({
     fontWeight:"bold"
   },
   selectedCategoryText: {
+    fontSize:18,
     color: "#db6d8e",
   },
 });
