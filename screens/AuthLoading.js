@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View,  ActivityIndicator, Text } from 'react-native';
 import {auth} from "../firebase"
+
 
 export default function AuthLoading({navigation}) {
 
@@ -22,23 +23,13 @@ export default function AuthLoading({navigation}) {
     return (
         <View
       style={{
-        width: "100%",
-        height: '70%',
-        flex: 1,
-        alignSelf: 'center',
-        justifyContent: 'space-around',
+       flex: 1,
+        justifyContent: "center"
       }}>
-      <ActivityIndicator size="large" color="#0000ff" />
-      <View>
-        <Text
-          style={{
-            fontWeight: 'bold',
-            alignSelf: 'center',
-            fontSize: 18,
-          }}>{`Loading`}</Text>
-      </View>
+       <ActivityIndicator size="large" color="#db6d8e" />
+      
     </View>
     );
 
-  
+    
 }

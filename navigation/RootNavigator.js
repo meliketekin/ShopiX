@@ -12,7 +12,7 @@ export default function RootNavigator() {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{headerShown: false}}>
+      <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="BottomTabs">
         <Stack.Screen name="Auth" component={AuthStack} />
         <Stack.Screen name="BottomTabs" component={BottomTabNavigation} />
       </Stack.Navigator>

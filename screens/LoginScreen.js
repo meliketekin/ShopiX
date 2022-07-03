@@ -25,7 +25,7 @@ const loginValidationSchema = yup.object().shape({
 });
 
 export default function LoginScreen({ navigation}) {
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(true);
   const dispatch = useDispatch();
   const handleLogin = ({ email, password }) => {
     // Sign in an existing user with Firebase
@@ -42,7 +42,7 @@ export default function LoginScreen({ navigation}) {
               if (doc.exists) {
                 dispatch(login(doc.data()));
                 alert("succesfull")
-                //navigation.navigate("Home");
+                navigation.navigate("AuthLoading");
               } else {
                 alert("User does not exist");
               }

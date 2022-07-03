@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text} from "react-native";
+import { logout } from "../features/userSlice";
+import { auth } from "../firebase";
 
 export default function ProfileScreen() {
   return (
@@ -8,6 +10,7 @@ export default function ProfileScreen() {
         <Text style={{ fontSize: 30, color: "black", alignSelf: "center" }}>
           Profile Screen
         </Text>
+        <Button onPress={()=>auth.signOut().then(()=>dispatch(logout()))} title='logout'></Button>
       </View>
     </View>
   );

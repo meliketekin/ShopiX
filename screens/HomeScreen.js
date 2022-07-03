@@ -1,18 +1,140 @@
 import React from "react";
-import { View, Text, Button} from "react-native";
-import { logout } from "../features/userSlice";
-import { auth } from "../firebase";
-import { useDispatch, useSelector } from "react-redux";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  TextInput,
+} from "react-native";
+import { useFonts } from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+
 export default function HomeScreen() {
-  const dispatch = useDispatch();
-  return (
-    <View style={{ flex: 1, justifyContent: "flex-end" }}>
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <Text style={{ fontSize: 30, color: "black", alignSelf: "center" }}>
-          Home Screen
-        </Text>
-        <Button onPress={()=>auth.signOut().then(()=>dispatch(logout()))} title='logout'></Button>
+  const categories = ["All", "Women", "Men", "Jewelery", "Electronics"];
+  const [categoryIndex, setCategoryIndex] = useState(0);
+
+  const CategoryList = () => {
+    return (
+      <View style={styles.categoryContainer}>
+        {categories.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => setCategoryIndex(index)}
+            style={{
+              borderBottomWidth: categoryIndex == index && 2,
+              borderBottomColor: categoryIndex == index && "#db6d8e",
+            }}
+          >
+            <Text
+              style={[
+                styles.categoryText,
+                categoryIndex == index && styles.selectedCategoryText,
+              ]}
+            >
+              {item}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
+    );
+  };
+  const [loaded] = useFonts({
+    CaveatBrush: require("../assets/fonts/CaveatBrush-Regular.ttf"),
+    Chewy: require("../assets/fonts/Chewy-Regular.ttf"),
+    GochiHand: require("../assets/fonts/GochiHand-Regular.ttf"),
+    Monoton: require("../assets/fonts/Monoton-Regular.ttf"),
+    Satisfy: require("../assets/fonts/Satisfy-Regular.ttf"),
+  });
+  if (!loaded) {
+    return null;
+  }
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={styles.welcomeText}>Welcome to</Text>
+      <Text style={styles.shopixText}>ShopiX</Text>
+      <View style={styles.searchAndFilter}>
+        <View style={styles.searchBar}>
+          <Ionicons
+            name="search"
+            size={25}
+            color="black"
+            style={{ marginLeft: 10 }}
+          />
+          <TextInput style={styles.searchInput} placeholder="Search" />
+        </View>
+        <TouchableOpacity style={styles.filter}>
+          <Ionicons name="options" size={30} color="white" />
+        </TouchableOpacity>
+      </View>
+      <CategoryList />
     </View>
   );
 }
+const styles = StyleSheet.create({
+  welcomeText: {
+    fontSize: 25,
+    fontWeight: "bold",
+    marginTop: 30,
+    marginLeft: 20,
+  },
+  shopixText: {
+    color: "#db6d8e",
+    fontWeight: "bold",
+    fontSize: 60,
+    marginTop: 0,
+    marginLeft: 20,
+    fontFamily: "Satisfy",
+  },
+  searchBar: {
+    flexDirection: "row",
+    borderWidth: 1,
+    alignItems: "center",
+    backgroundColor: "white",
+    borderColor: "#db6d8e",
+    borderRadius: 10,
+    height: 50,
+    marginTop: 10,
+    marginHorizontal: 20,
+    marginRight: 10,
+    flex: 10,
+  },
+  searchInput: {
+    fontSize: 17,
+    marginLeft: 10,
+    flex: 1,
+  },
+  searchAndFilter: {
+    flexDirection: "row",
+    justifyContent: "center",
+
+    height: "12%",
+  },
+  filter: {
+    borderWidth: 1,
+    backgroundColor: "#db6d8e",
+    borderColor: "#db6d8e",
+    flex: 1,
+    padding: 10,
+    height: 50,
+    marginTop: 10,
+    marginRight: 20,
+    borderRadius: 10,
+    justifyContent: "center",
+  },
+  categoryContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+    justifyContent: "space-between",
+    marginHorizontal: 20,
+    height: "4%",
+  },
+  categoryText: {
+    fontSize: 17,
+    color: "#1e1e1e",
+    fontWeight:"bold"
+  },
+  selectedCategoryText: {
+    color: "#db6d8e",
+  },
+});
