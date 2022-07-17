@@ -105,7 +105,7 @@ export default function SignUpScreen({ navigation }) {
             <TouchableOpacity
               style={{ marginLeft: 10, marginTop: "4%" }}
               onPress={() => {
-                navigation.navigate("Welcome");
+                navigation.navigate("WelcomeScreen");
               }}
             >
               <Ionicons name="chevron-back" size={50} color="#fe7979" />

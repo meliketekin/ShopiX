@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
   StyleSheet,
   Text,
@@ -7,7 +7,24 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+
+
 export default function WelcomeScreen({navigation}) {
+
+  // useEffect(() => {
+  //   const auth = getAuth();
+  //   const user = auth.currentUser;
+  //   console.log(user)
+  //       if(user){
+  //           navigation.navigate("BottomTabs")
+  //       }
+  //       else {
+  //         console.log("user", user)
+  //           navigation.navigate('WelcomeScreen');
+  //       }
+    
+  // }, []);
+
   return (
     <View style={styles.container}>
       <ImageBackground

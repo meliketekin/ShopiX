@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 export const ProductCard = ({ item }) => {
-  const [isFavorite, setisFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => setisFavorite(!isFavorite)}>
+      <TouchableOpacity onPress={() => setIsFavorite(!isFavorite)}>
         <Ionicons
           name={isFavorite ? "heart" : "heart-outline"}
           size={25}
@@ -17,16 +17,27 @@ export const ProductCard = ({ item }) => {
       <View style={styles.imageContainer}>
         <Image style={styles.productImage} source={{ uri: item.image }} />
       </View>
-      <Text style={styles.itemTitle}>{item.title}</Text>
+      <Text numberOfLines={2} style={styles.itemTitle}>{item.title}</Text>
+      <View style={styles.priceAndCartContainer}>
+        <Text style={styles.itemPrice}>${item.price}</Text>
+        <TouchableOpacity>
+        <AntDesign
+          name="plussquare"
+          size={30}
+          color="#db6d8e"
+          
+        />
+      </TouchableOpacity>
+      </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    margin: 15,
     backgroundColor: "white",
     borderRadius: 15,
-    height: 225,
+    height: 250,
     flex: 1,
     shadowColor: "#000",
     shadowOffset: {
@@ -49,8 +60,22 @@ const styles = StyleSheet.create({
     height: "90%",
   },
   itemTitle: {
-    marginHorizontal: 10,
+    marginHorizontal: 15,
     marginTop: 10,
-    fontSize: 12,
+    fontSize: 13,
   },
+  priceAndCartContainer: {
+    flexDirection: "row",
+  
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 15,
+    paddingTop:15
+    
+
+  },
+  itemPrice: {
+    fontWeight:"bold",
+    fontSize:15
+  }
 });

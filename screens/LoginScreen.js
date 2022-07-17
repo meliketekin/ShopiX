@@ -13,6 +13,8 @@ import { Formik } from "formik";
 import { auth, firestore } from "../firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { login, logout, selectUser } from "../features/userSlice";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore"; 
 
 
 
@@ -27,9 +29,10 @@ const loginValidationSchema = yup.object().shape({
 export default function LoginScreen({ navigation}) {
   const [showPassword, setShowPassword] = useState(true);
   const dispatch = useDispatch();
+
   const handleLogin = ({ email, password }) => {
     // Sign in an existing user with Firebase
-    auth
+    auth()
       .signInWithEmailAndPassword(email, password)
 
       .then((auth) => {
