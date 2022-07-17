@@ -47,7 +47,7 @@ export default function HomeScreen() {
             key={index}
             onPress={() => setCategoryIndex(index)}
             style={{
-              borderBottomWidth: categoryIndex == index && 2,
+              borderBottomWidth: categoryIndex == index ? 2 : 0,
               borderBottomColor: categoryIndex == index && "#db6d8e",
             }}
           >
