@@ -7,14 +7,15 @@ import {
 import WelcomeScreen from "../screens/WelcomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import LoginScreen from "../screens/LoginScreen";
-import BottomTabs from "./BottomTabNavigation";
+
 import AuthLoading from "../screens/AuthLoading";
+import OnboardingScreen from "../screens/OnboardingScreen";
 
 const Stack = createStackNavigator();
 
 export default function AuthStack() {
   return (
-    <Stack.Navigator initialRouteName="WelcomeScreen">
+    <Stack.Navigator initialRouteName="OnboardingScreen">
       {/* <Stack.Screen
         name="AuthLoading"
         component={AuthLoading}
@@ -22,6 +23,14 @@ export default function AuthStack() {
           headerShown: false,
         }}
       /> */}
+      <Stack.Screen
+        name="OnboardingScreen"
+        component={OnboardingScreen}
+        options={{
+          headerShown: false,
+          
+        }}
+      />
       <Stack.Screen
         name="WelcomeScreen"
         component={WelcomeScreen}
